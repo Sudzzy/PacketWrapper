@@ -18,6 +18,9 @@
  */
 package com.comphenix.packetwrapper;
 
+import com.comphenix.protocol.events.PacketEvent;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 import com.comphenix.protocol.PacketType;
@@ -37,21 +40,39 @@ public class WrapperPlayClientUseEntity extends AbstractPacket {
     }
     
     /**
-     * Retrieve Target.
+     * Retrieve Target ID.
      * @return The current Target
      */
-    public int getTarget() {
+    public int getTargetID() {
         return handle.getIntegers().read(0);
     }
     
     /**
-     * Set Target.
+     * Set Target ID.
      * @param value - new value.
      */
-    public void setTarget(int value) {
+    public void setTargetID(int value) {
         handle.getIntegers().write(0, value);
     }
-    
+
+    /**
+     * Retrieve the entity the player is interacting with.
+     * @param world - the world this event occurred in.
+     * @return The target entity.
+     */
+    public Entity getTarget(World world) {
+        return handle.getEntityModifier(world).read(0);
+    }
+
+    /**
+     * Retrieve the entity the player is interacting with.
+     * @param event - the current packet event.
+     * @return The target entity.
+     */
+    public Entity getTarget(PacketEvent event) {
+        return getTarget(event.getPlayer().getWorld());
+    }
+
     /**
      * Retrieve Type.
      * <p>
@@ -79,3 +100,4 @@ public class WrapperPlayClientUseEntity extends AbstractPacket {
     }
  
 }
+
